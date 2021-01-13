@@ -1,0 +1,70 @@
+﻿<metro:MetroWindow x:Class="WpfWorkManager.Controls.TeamLeaderTaskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:converter="clr-namespace:WpfWorkManager.Converters"
+        xmlns:local="clr-namespace:WpfWorkManager.Controls"
+        mc:Ignorable="d"
+        Title="TeamLeaderTaskWindow" Height="650" Width="350">
+    <metro:MetroWindow.Resources>
+        <converter:DateConverter x:Key="dateConverter"></converter:DateConverter>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <StackPanel Margin="10">
+            <Label Content="Сотрудники" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding LeadersNames}" SelectedValue="{Binding Leader, Mode=TwoWay}" 
+                      Text="{Binding Leader, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GetLeaderCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label Content="Текущие задачи" FontWeight="Bold"></Label>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <ScrollViewer  VerticalScrollBarVisibility="Auto" Height="140">
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  TextAlignment="Justify" 
+                               VerticalAlignment="Stretch" Text="{Binding AllTasks}">
+
+                    </TextBlock>
+                </ScrollViewer>
+            </Border>
+            <Label Content="Задача" FontWeight="Bold"></Label>
+            <TextBox Text="{Binding NewTask, Mode=TwoWay}"></TextBox>
+            <Label Content="Описание" FontWeight="Bold"></Label>
+            <TextBox Text="{Binding Description, Mode=TwoWay}"></TextBox>
+            <Label Content="Комментарий" FontWeight="Bold"></Label>
+            <TextBox Text="{Binding Comment, Mode=TwoWay}"></TextBox>
+            <DockPanel>
+                <Label Content="Нач." FontWeight="Bold"></Label>
+                <DatePicker FontSize="15" Width="120" Text="{Binding StartDate, Mode=TwoWay, Converter={StaticResource dateConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedDateChanged">
+                            <i:InvokeCommandAction Command="{Binding GetEndDateCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </DatePicker>
+                <Label Content="Кон." FontWeight="Bold"></Label>
+                <DatePicker FontSize="15" Width="120" Text="{Binding EndDate, Mode=TwoWay, Converter={StaticResource dateConverter}}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedDateChanged">
+                            <i:InvokeCommandAction Command="{Binding GetEndDateCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </DatePicker>
+            </DockPanel>
+            <Button Content="Добавить" Width="120" Margin="10,10,10,20" HorizontalAlignment="Left" 
+                    Command="{Binding AddNewTaskCommand}"></Button>
+            <Label Content="Задачи" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding CurrentTasks}" SelectedValue="{Binding TaskName, Mode=TwoWay}" 
+                      Text="{Binding TaskName, Mode=TwoWay}">
+                
+            </ComboBox>
+            <Button Content="Удалить" Width="120" Margin="10,20,0,0" HorizontalAlignment="Left" 
+                    Command="{Binding DeleteTaskCommand}"></Button>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>

@@ -15,19 +15,19 @@ using System.Windows.Shapes;
 using Unity;
 using WpfWorkManager.ViewModels;
 
-namespace WpfWorkManager
+namespace WpfWorkManager.Controls
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для SimpleUserControl.xaml
     /// </summary>
-    public partial class MainWindow : MahApps.Metro.Controls.MetroWindow
+    public partial class SimpleUserControl : MahApps.Metro.Controls.MetroContentControl
     {
         [Dependency]
         public ViewMain ViewMain
         {
             set => DataContext = value;
         }
-        public MainWindow()
+        public SimpleUserControl()
         {
             InitializeComponent();
         }

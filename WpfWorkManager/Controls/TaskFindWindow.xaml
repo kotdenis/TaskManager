@@ -1,0 +1,72 @@
+﻿<metro:MetroWindow x:Class="WpfWorkManager.Controls.TaskFindWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:converter="clr-namespace:WpfWorkManager.Converters"
+        xmlns:local="clr-namespace:WpfWorkManager.Controls"
+        mc:Ignorable="d"
+        Title="TaskFindWindow" Height="550" Width="300">
+    <metro:MetroWindow.Resources>
+        <converter:DateConverter x:Key="dateConverter"></converter:DateConverter>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <StackPanel Margin="10">
+            <Label Content="Роль сотрудника" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding Roles}" SelectedValue="{Binding EmpRole, Mode=TwoWay}" 
+                      Text="{Binding EmpRole, Mode=TwoWay}" SelectedIndex="{Binding RoleIndex, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GetEmployeeCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label Content="Имя сотрудника" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding Names}" SelectedValue="{Binding EmpName, Mode=TwoWay}" 
+                      Text="{Binding EmpName, Mode=TwoWay}">
+                
+            </ComboBox>
+            <Label Content="Дата последнего изменения" FontWeight="Bold"></Label>
+            <DatePicker FontSize="15" Text="{Binding StartDate, Mode=TwoWay, Converter={StaticResource dateConverter}}" 
+                        Margin="10,0,10,0">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedDateChanged">
+                        <i:InvokeCommandAction Command="{Binding GetEndDateCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DatePicker>
+            <CheckBox  Margin="10,20,0,0" Content="Изменения внесены" IsChecked="{Binding IsChangesInserted}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding GetInsertedChangesCheckedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding GetInsertedChangesCheckedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+            <CheckBox  Margin="10,20,0,0" Content="Использовать последнее изменение" IsChecked="{Binding IsLastChangeUsed}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding UseLastChangeCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding UseLastChangeCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+            <Border BorderThickness="1" BorderBrush="Black" Margin="0,40,0,0">
+                <ScrollViewer  VerticalScrollBarVisibility="Auto" Height="140">
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  TextAlignment="Justify" 
+                               VerticalAlignment="Stretch" Text="{Binding FindingTask}">
+
+                    </TextBlock>
+                </ScrollViewer>
+            </Border>
+            <Button Content="Найти" Width="120" HorizontalAlignment="Right" Margin="0,40,20,10" 
+                    Command="{Binding FindTaskCommand}"></Button>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>

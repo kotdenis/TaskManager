@@ -1,12 +1,73 @@
-﻿<Window x:Class="WpfWorkManager.MainWindow"
+﻿<metro:MetroWindow x:Class="WpfWorkManager.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:control="clr-namespace:WpfWorkManager.Controls"
         xmlns:local="clr-namespace:WpfWorkManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="700" Width="1100">
+    <metro:MetroWindow.Resources>
+        <DataTemplate x:Key="userStartControl">
+            <control:StartUserControl />
+        </DataTemplate>
+        <DataTemplate x:Key="simpleControl">
+            <control:SimpleUserControl />
+        </DataTemplate>
+        <DataTemplate x:Key="teamLeaderControl">
+            <control:TeamLeaderUserControl />
+        </DataTemplate>
+        <DataTemplate x:Key="leaderControl">
+            <control:LeaderUserControl />
+        </DataTemplate>
+        <Style x:Key="controlUserStyle" TargetType="ContentPresenter">
+            <Setter Property="ContentTemplate" Value="{StaticResource userStartControl}"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding UserRoleNumber}" Value="0">
+                    <Setter Property="ContentTemplate" Value="{StaticResource teamLeaderControl}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding UserRoleNumber}" Value="1">
+                    <Setter Property="ContentTemplate" Value="{StaticResource leaderControl}"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding UserRoleNumber}" Value="2">
+                    <Setter Property="ContentTemplate" Value="{StaticResource simpleControl}"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="buttonStyle" TargetType="Button">
+            <Setter Property="Visibility" Value="Visible"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsEntered}" Value="True">
+                    <Setter Property="Visibility" Value="Hidden"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </metro:MetroWindow.Resources>
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.8*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Viewbox Grid.Column="0" Grid.Row="0">
+            <DockPanel  Margin="0" Background="Teal" Width="1000" Height="100">
+                <TextBlock HorizontalAlignment="Left" Margin="20,28,10,10" Text="Task Manager" FontSize="40" FontWeight="Bold" Width="312" 
+                           Foreground="White"></TextBlock>
+                <DockPanel Width="500" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding UserName, Mode=TwoWay}" Foreground="White" FontSize="20" Margin="10,46,5,0" 
+                               TextAlignment="Center" Width="336"></TextBlock>
+                    <Button  Width="100" Height="40" BorderThickness="2"
+                    Content="Вход" BorderBrush="White" Background="Teal" Foreground="White" 
+                    Margin="10,20,5,0" Command="{Binding ShowLoginWindowCommand}" Style="{StaticResource buttonStyle}"></Button>
+                </DockPanel>
+            </DockPanel>
+        </Viewbox>
+        <Viewbox Grid.Column="0" Grid.Row="1">
+            <ContentPresenter Style="{StaticResource controlUserStyle}" Content="{Binding}" Width="870" Height="446"></ContentPresenter>
+        </Viewbox>
     </Grid>
-</Window>
+</metro:MetroWindow>

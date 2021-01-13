@@ -1,0 +1,109 @@
+﻿<metro:MetroWindow x:Class="WpfWorkManager.Controls.AddDeleteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:converter="clr-namespace:WpfWorkManager.Converters"
+        xmlns:local="clr-namespace:WpfWorkManager.Controls"
+        mc:Ignorable="d"
+        Title="AddDeleteWindow" Height="450" Width="400">
+    <metro:MetroWindow.Resources>
+        <Style x:Key="stackStyle" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Visible"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DeleteEnabled}" Value="True">
+                    <Setter Property="Visibility" Value="Hidden"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="stackStyleTwo" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Hidden"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DeleteEnabled}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.75*"></RowDefinition>
+            <RowDefinition Height="0.25*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" Style="{StaticResource stackStyle}">
+            <Label Content="Имя сотрудника" FontWeight="Bold"></Label>
+            <TextBox Text="{Binding EmpName, Mode=OneWayToSource}"></TextBox>
+            <Label Content="Статус сотрудника" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding EmloyeeStatus}" SelectedValue="{Binding Name, Mode=TwoWay}" 
+                      Text="{Binding Name, Mode=TwoWay}" SelectedIndex="{Binding LeaderIndex, Mode=OneWayToSource}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GetLeadersCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label Content="Пароль сотрудника" FontWeight="Bold"></Label>
+            <TextBox Text="{Binding Password, Mode=OneWayToSource}"></TextBox>
+            <Label Content="Руководитель сотрудника" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding LeadersNames}" SelectedValue="{Binding LeaderName, Mode=TwoWay}" 
+                      Text="{Binding LeaderName, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GetLeaderCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Button Content="Добавить" Width="120" HorizontalAlignment="Right" Margin="0,40,20,0" 
+                    Command="{Binding AddEmployeeCommand}"></Button>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="0" Margin="10" Style="{StaticResource stackStyleTwo}">
+            <Label Content="Статус сотрудника" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding EmloyeeStatus}" SelectedValue="{Binding Leader, Mode=TwoWay}" 
+                      Text="{Binding Leader, Mode=TwoWay}" SelectedIndex="{Binding LeaderIndex, Mode=OneWayToSource}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GetEmployeesToDeleteCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Label Content="Имя сотрудника" FontWeight="Bold"></Label>
+            <ComboBox ItemsSource="{Binding Employees}" SelectedValue="{Binding EmpName, Mode=OneWayToSource}" 
+                      Text="{Binding EmpName, Mode=OneWayToSource}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GetLeaderCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+            <Button Content="Удалить" Width="120" HorizontalAlignment="Right" Margin="0,150,20,0" 
+                    Command="{Binding DeleteEmployeeCommand}"></Button>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1" Margin="10">
+            <CheckBox  Margin="10,20,0,0" Content="Добавить" IsChecked="{Binding AddEnabled, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding GetAddEnabledCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding GetDeletedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+            <CheckBox  Margin="10,20,0,0" Content="Удалить" IsChecked="{Binding DeleteEnabled, Mode=TwoWay}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Checked">
+                        <i:InvokeCommandAction Command="{Binding GetDeletedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Unchecked">
+                        <i:InvokeCommandAction Command="{Binding GetAddEnabledCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </CheckBox>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>

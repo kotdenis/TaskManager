@@ -1,0 +1,65 @@
+﻿<metro:MetroWindow x:Class="WpfWorkManager.Controls.CurrentSprintWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:converter="clr-namespace:WpfWorkManager.Converters"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:WpfWorkManager.Controls"
+        mc:Ignorable="d"
+        Title="CurrentSprintWindow" Height="450" Width="800">
+    <metro:MetroWindow.Resources>
+        <Style x:Key="reportStackStyle" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Visible"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}" Value="True">
+                    <Setter Property="Visibility" Value="Hidden"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="draftStackStyle" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Hidden"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsVisible}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.7*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0" Style="{StaticResource draftStackStyle}" >
+            <TextBox  HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" 
+                 AcceptsReturn="True" TextAlignment="Justify" Text="{Binding ReportDraft, Mode=TwoWay}" Margin="10" ></TextBox>
+        </StackPanel>
+        <StackPanel Margin="10" Grid.Column="0" Grid.Row="0" Style="{StaticResource reportStackStyle}">
+            <Border BorderThickness="1" BorderBrush="Black">
+                <ScrollViewer  VerticalScrollBarVisibility="Auto" Height="200">
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  TextAlignment="Justify" 
+                               VerticalAlignment="Stretch" Text="{Binding Report}">
+
+                    </TextBlock>
+                </ScrollViewer>
+            </Border>
+            <TextBox HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" TextAlignment="Justify"
+                     Margin="0,0,0,0" Height="60" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                     Text="{Binding ReportAdding, Mode=TwoWay}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <Button Content="Добавить" Width="100" Margin="10,10,30,0" HorizontalAlignment="Left" 
+                    Command="{Binding SaveReportChangesCommand}"></Button>
+            <DockPanel Margin="10,20,0,0"  HorizontalAlignment="Left" Width="755">
+                <Button Content="Отчет" Width="100" Command="{Binding GetReportCommand}"></Button>
+                <Button Content="Черновик" Width="100" Margin="10,0,10,0" Command="{Binding GetReportDraftCommand}"></Button>
+                <Button Content="Завершить" Width="120" HorizontalAlignment="Right" Command="{Binding EndSprintCommand}"></Button>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>

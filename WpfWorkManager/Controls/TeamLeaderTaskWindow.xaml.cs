@@ -10,24 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Unity;
 using WpfWorkManager.ViewModels;
 
-namespace WpfWorkManager
+namespace WpfWorkManager.Controls
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для TeamLeaderTaskWindow.xaml
     /// </summary>
-    public partial class MainWindow : MahApps.Metro.Controls.MetroWindow
+    public partial class TeamLeaderTaskWindow : MahApps.Metro.Controls.MetroWindow
     {
         [Dependency]
-        public ViewMain ViewMain
+        public TeamLeaderTaskView TeamLeaderTask
         {
             set => DataContext = value;
         }
-        public MainWindow()
+        public TeamLeaderTaskWindow()
         {
             InitializeComponent();
         }

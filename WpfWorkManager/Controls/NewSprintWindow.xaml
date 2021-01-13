@@ -1,0 +1,39 @@
+﻿<metro:MetroWindow x:Class="WpfWorkManager.Controls.NewSprintWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:converter="clr-namespace:WpfWorkManager.Converters"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:WpfWorkManager.Controls"
+        mc:Ignorable="d"
+        Title="NewSprintWindow" Height="300" Width="250">
+    <metro:MetroWindow.Resources>
+        <converter:DateConverter x:Key="dateConverter"></converter:DateConverter>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <StackPanel Margin="10">
+            <Label Content="Наименование" FontWeight="Bold"></Label>
+            <TextBox Text="{Binding SprintName, Mode=TwoWay}" ></TextBox>
+            <Label Content="Дата начала" FontWeight="Bold"></Label>
+            <DatePicker FontSize="15" Width="210" Text="{Binding StartDate, Mode=TwoWay, Converter={StaticResource dateConverter}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedDateChanged">
+                        <i:InvokeCommandAction Command="{Binding GetStartDateCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DatePicker>
+            <Label Content="Дата конца" FontWeight="Bold"></Label>
+            <DatePicker FontSize="15" Width="210" Text="{Binding EndDate, Mode=TwoWay, Converter={StaticResource dateConverter}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedDateChanged">
+                        <i:InvokeCommandAction Command="{Binding GetStartDateCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </DatePicker>
+            <Button Content="Создать" HorizontalAlignment="Right" Margin="0,40,20,0" 
+                    Command="{Binding SaveNewSprintCommand}"></Button>
+        </StackPanel>
+    </Grid>
+</metro:MetroWindow>

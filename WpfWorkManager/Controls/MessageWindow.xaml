@@ -1,0 +1,60 @@
+﻿<metro:MetroWindow x:Class="WpfWorkManager.Controls.MessageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:local="clr-namespace:WpfWorkManager.Controls"
+        mc:Ignorable="d"
+        Title="MessageWindow" Height="250" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <metro:MetroWindow.Resources>
+        <Style TargetType="Image" x:Key="ImageStyle">
+            <Setter Property="Source" Value="/Images/check.png"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding EnumCount}" Value="1">
+                    <Setter Property="Source" Value="/Images/no.png"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding EnumCount}" Value="2">
+                    <Setter Property="Source" Value="/Images/danger.png"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </metro:MetroWindow.Resources>
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF575454" Offset="0"/>
+                <GradientStop Color="#FF0E0C0C" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.9*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="0.6*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Text="{Binding Label}" Foreground="#708090" Grid.Column="1" Grid.Row="0" Margin="0,0,0,0" 
+                   FontSize="25" FontWeight="Bold" VerticalAlignment="Top"/>
+
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.7*"></ColumnDefinition>
+                <ColumnDefinition Width="0.3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{Binding Message}" TextWrapping="WrapWithOverflow" ScrollViewer.VerticalScrollBarVisibility="Auto"  Foreground="LightGray" 
+                       Margin="5,5,21,10"  Grid.Column="0" Grid.Row="0" FontSize="15"/>
+            <Image Style="{StaticResource ImageStyle}" Stretch="Uniform" Margin="0,0,22,65" 
+                   Grid.Column="1" Grid.Row="0"/>
+        </Grid>
+        <DockPanel Grid.Column="1" Grid.Row="2">
+            <Button Content="OK" Width="75" Margin="235,0,5,0" Command="{Binding CloseCommand}"/>
+        </DockPanel>
+    </Grid>
+</metro:MetroWindow>

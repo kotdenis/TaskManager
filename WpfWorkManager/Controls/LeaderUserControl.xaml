@@ -1,0 +1,189 @@
+﻿<metro:MetroContentControl x:Class="WpfWorkManager.Controls.LeaderUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:metro="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:converter="clr-namespace:WpfWorkManager.Converters"
+             xmlns:local="clr-namespace:WpfWorkManager.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="870">
+    <metro:MetroContentControl.Resources>
+        <converter:DateConverter x:Key="dateConverter"></converter:DateConverter>
+        <Style x:Key="stackStyle" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Visible"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsTask}" Value="True">
+                    <Setter Property="Visibility" Value="Hidden"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="stackStyleTwo" TargetType="StackPanel">
+            <Setter Property="Visibility" Value="Hidden"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsTask}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="borderStyle" TargetType="Border" >
+            <Setter Property="Background" Value="LightSkyBlue"></Setter>
+            <Setter Property="Margin" Value="0"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IntRole}" Value="1" >
+                    <Setter Property="Background" Value="MediumTurquoise"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IntRole}" Value="2">
+                    <Setter Property="Background" Value="Olive"></Setter>
+                    <Setter Property="Margin" Value="30,0,0,0"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="borderStyleTwo" TargetType="Border" >
+            <Setter Property="Background" Value="Salmon"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IssueState}" Value="1" >
+                    <Setter Property="Background" Value="MediumSeaGreen"></Setter>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IssueState}" Value="2">
+                    <Setter Property="Background" Value="DarkOrange"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </metro:MetroContentControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"></RowDefinition>
+            <RowDefinition Height="0.9*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="1" Grid.Row="0" Content="Работа по задаче" FontSize="20" FontWeight="Bold" Margin="30,10,0,0"></Label>
+        <Label Grid.Column="0" Grid.Row="0" Content="Сотрудники" FontSize="20" FontWeight="Bold" Margin="30,10,0,0"></Label>
+        <StackPanel Grid.Column="0" Grid.Row="1">
+            <Label Content="Отчет за задачу" FontWeight="Bold"></Label>
+            <Border BorderThickness="1" BorderBrush="Black">
+                <ScrollViewer  VerticalScrollBarVisibility="Auto" Height="200">
+                    <TextBlock TextWrapping="Wrap" Margin="0,0,20,0"  TextAlignment="Justify" 
+                               VerticalAlignment="Stretch" Text="{Binding IssueReport}">
+
+                    </TextBlock>
+                </ScrollViewer>
+            </Border>
+            <Label Content="Дополнение" FontWeight="Bold"></Label>
+            <TextBox HorizontalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" TextAlignment="Justify"
+                     Margin="0,0,0,0" Height="60" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                     Text="{Binding ReportSimpleAdding}"></TextBox>
+            <DockPanel HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Button Content="Добавить" Width="100" Command="{Binding AddDataToSimpleReportCommand}"></Button>
+                <Button Content="Изменить" Command="{Binding ShowIssueChangeReportWindowCommand}" Width="100" Margin="10,0,10,0"></Button>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Right">
+                <Button Content="Назначить задачи" Width="160" Margin="0,5,10,0" 
+                        Command="{Binding ShowLeaderTaskWindowCommand}"></Button>
+                <Button Content="Завершить" Width="120" Margin="0,5,10,0" 
+                        Command="{Binding FinishSimpleTaskCommand}"></Button>
+            </DockPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1" Style="{StaticResource stackStyle}">
+            <ListBox Height="330" Margin="10" ItemsSource="{Binding AllEmployees}" 
+                     SelectedIndex="{Binding CurrentEmployeeIndex, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Black" Width="340" Style="{StaticResource borderStyle}" CornerRadius="5">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.7*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Name}" HorizontalAlignment="Left" 
+                                           Margin="10,4,0,0" FontWeight="Bold"></TextBlock>
+                                <DockPanel Grid.Column="0" Grid.Row="1">
+                                    <TextBlock  Text="{Binding Role}" HorizontalAlignment="Left" 
+                                           Margin="10,3,0,5" FontWeight="Bold"></TextBlock>
+                                    <Label Margin="5,0,0,5" Content="Пароль:"  FontWeight="Bold" VerticalAlignment="Top" 
+                                           ></Label>
+                                    <TextBlock  Text="{Binding Password}" HorizontalAlignment="Left" 
+                                           Margin="5,5,0,5" FontWeight="Bold"></TextBlock>
+                                </DockPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding GetConcreteEmployeeCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListBox>
+            <DockPanel HorizontalAlignment="Left" Margin="50,0,0,0">
+                <Button Content="Сотрудники" Width="120" Command="{Binding GetEmployeeEnabledCommand}"></Button>
+                <Button Content="Задачи" Width="120" Margin="10,0,0,0" 
+                        Command="{Binding GetTaskEnabledCommand}"></Button>
+            </DockPanel>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1" Style="{StaticResource stackStyleTwo}">
+            <DockPanel Margin="30,0,0,5">
+                <Rectangle Width="15" Height="15" Fill="Salmon"></Rectangle>
+                <Label Content="Выполнить" FontWeight="Bold"></Label>
+                <Rectangle Width="15" Height="15" Fill="MediumSeaGreen"></Rectangle>
+                <Label Content="Готово" FontWeight="Bold"></Label>
+                <Rectangle Width="15" Height="15" Fill="DarkOrange"></Rectangle>
+                <Label Content="В процессе" FontWeight="Bold"></Label>
+            </DockPanel>
+            <ListBox  Margin="20,5,27,16" Height="300" ItemsSource="{Binding SimpleUsersTask}" 
+                      SelectedIndex="{Binding SimpleTaskIndex, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Black" Width="340" Style="{StaticResource borderStyleTwo}" 
+                                Height="140" Margin="5,0,5,0" >
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.4*"></RowDefinition>
+                                    <RowDefinition Height="0.6*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <DockPanel Grid.Row="0" Grid.Column="0">
+                                    <TextBlock  Text="{Binding UserIssue}" TextWrapping="Wrap" 
+                                           Foreground="White" FontWeight="Bold" Margin="5" ></TextBlock>
+                                    <TextBlock  Text="{Binding StartDate, Converter={StaticResource dateConverter}}" TextWrapping="Wrap" 
+                                           Foreground="White" FontWeight="Bold" Margin="5" ></TextBlock>
+                                    <TextBlock  Text="{Binding EndDate, Converter={StaticResource dateConverter}}" TextWrapping="Wrap" 
+                                           Foreground="White" FontWeight="Bold" Margin="5" ></TextBlock>
+                                    <!--<Button Content="Выбрать" HorizontalAlignment="Right" Margin="5,5,10,0"></Button>-->
+                                </DockPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="0">
+                                    <TextBlock  Text="{Binding Description}" FontSize="12" TextWrapping="Wrap" 
+                                           Foreground="White" Margin="5" TextAlignment="Justify" Height="30"
+                               VerticalAlignment="Stretch"></TextBlock>
+                                    <TextBlock  Text="{Binding IssueComent}" FontSize="12" TextWrapping="Wrap" 
+                                           Foreground="White" Margin="5" TextAlignment="Justify" Height="30"
+                               VerticalAlignment="Stretch"></TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectSimpleTaskCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ListBox>
+            <DockPanel HorizontalAlignment="Left" Margin="50,0,0,0">
+                <Button Content="Сотрудники" Width="120" Command="{Binding GetEmployeeEnabledCommand}"></Button>
+                <Button Content="Задачи" Width="120" Margin="10,0,0,0" 
+                        Command="{Binding GetTaskEnabledCommand}"></Button>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</metro:MetroContentControl>
